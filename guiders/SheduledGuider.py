@@ -1,7 +1,18 @@
 import math
 
 import comfy.samplers
+import numpy
 import torch
+
+
+def find_clothest_index(sigma, sigma_triggers):
+    index = 0
+    for i, trigger_sigma in enumerate(sigma_triggers):
+        if trigger_sigma >= sigma:
+            index = i
+        else:
+            break
+    return index
 
 
 class Guider_SheduledCFG(comfy.samplers.CFGGuider):
@@ -10,9 +21,16 @@ class Guider_SheduledCFG(comfy.samplers.CFGGuider):
         self.cfg_max = cfg_max
         self.cfg_min = cfg_min
         self.sigmas = sigmas
-        self.sigma_max = max(sigmas)
-        self.sigma_min = min(sigmas)
-        self.current_step = 0
+        self.sigma_max = int(max(sigmas))
+        self.sigma_min = int(min(sigmas))
+        self.model_sig_max = self.model.model.model_sampling.sigma_max
+        self.model_sig_min = self.model.model.model_sampling.sigma_min
+        self.model_sigma_triggers = numpy.zeros(len(sigmas))
+        delta_percent = 1 / len(sigmas)
+        for i in range(len(sigmas)):
+            percent = i * delta_percent
+            self.model_sigma_triggers[i] = \
+                self.model.model.model_sampling.percent_to_sigma(percent)
 
     def set_conds(self, positive, unconditional):
         self.inner_set_conds({"positive": positive, "uncond": unconditional})
@@ -29,15 +47,14 @@ class Guider_SheduledCFG(comfy.samplers.CFGGuider):
             model_options
         )
 
-        try:
-            current_sigma = self.sigmas[self.current_step]
-        except IndexError:
-            current_sigma = self.sigma_min
+        current_index = find_clothest_index(
+            timestep, self.model_sigma_triggers
+        )
+        current_sigma = self.sigmas[current_index]
         current_percent = ((current_sigma - self.sigma_min) /
                            (self.sigma_max - self.sigma_min))
         current_cfg = ((self.cfg_max - self.cfg_min) * current_percent
                        + self.cfg_min)
-        self.current_step += 1
 
         cfg = comfy.samplers.cfg_function(
             self.inner_model,
