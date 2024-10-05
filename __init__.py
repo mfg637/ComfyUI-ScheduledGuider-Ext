@@ -4,6 +4,7 @@ from .sigmas import concat_sigmas, invert_sigmas
 
 NODE_CLASS_MAPPINGS = {
     "SheduledCFGGuider": SheduledGuider.SheduledCFGGuider,
+    "PerpNegSheduledCFGGuider": SheduledGuider.PerpNegSheduledCFGGuider,
     "CosineScheduler": cosine_scheduler.CosineScheduler,
     "InvertSigmas": invert_sigmas.InvertSigmas,
     "ConcatSigmas": concat_sigmas.ConcatSigmas,
