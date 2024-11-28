@@ -4,7 +4,7 @@ import numpy
 import torch
 
 
-class GaussianScheduler:
+class LogNormalScheduler:
     @classmethod
     def INPUT_TYPES(s):
         return {"required":
@@ -44,11 +44,11 @@ class GaussianScheduler:
         delta_s = (b - a) / steps
         minmax_delta = sigma_max - sigma_min
 
-        constant_left_part = 1/(stdev * math.sqrt(2 * math.pi))
         for step in range(steps):
-            x = (step + 1) * delta_s + a
-            right_part = math.exp(-1 * (x - mean)**2/(stdev**2*2))
-            sigmas[step] = constant_left_part * right_part
+            x = (step + 0.5) * delta_s + a
+            left_part = 1/(x * stdev * math.sqrt(2 * math.pi))
+            right_part = math.exp(-1 * (math.log(x) - mean)**2/(stdev**2*2))
+            sigmas[step] = left_part * right_part
 
         min_value = min(sigmas)
         max_value = max(sigmas)
