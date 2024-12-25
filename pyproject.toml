@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-scheduledguider-ext"
+description = "NODES:ScheduledCFGGuider, PerpNegScheduledCFGGuider, CosineScheduler, Add zSNR Sigma max, InvertSigmas, ConcatSigmas, OffsetSigmas"
+version = "1.0.0"
+license = {file = "LICENSE"}
+
+[project.urls]
+Repository = "https://github.com/mfg637/ComfyUI-ScheduledGuider-Ext"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI-ScheduledGuider-Ext"
+Icon = ""
