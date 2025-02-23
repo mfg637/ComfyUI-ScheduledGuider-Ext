@@ -192,3 +192,21 @@ The `InvertSigmas` node inverts the sequence of sigma values such that each valu
   \text{inverted\_sigma}[i] = \sigma_{\text{max}} - \sigma[i] + \sigma_{\text{min}}
   \]
   This transformation reflects each sigma value about the central point between `sigma_max` and `sigma_min`.
+
+## OffsetSigmas Node
+
+![Illustration of OffsetSigmas Node interface](resources/img/offset_sigmas.png)
+
+The `OffsetSigmas` node applies an additive offset to each sigma value in a given sequence.
+
+### Parameters
+
+- **sigmas** (`SIGMAS`): An array of sigma values that will be adjusted by the specified offset.
+  
+- **offset** (`FLOAT`): The amount by which each sigma value will be incremented.
+  - Default: `1.0`
+  - Step: `0.1`
+
+### Functionality
+
+- Iterates through each sigma value in the input array and adds the specified `offset`.
