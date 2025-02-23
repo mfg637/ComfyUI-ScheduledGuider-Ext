@@ -75,3 +75,44 @@ The `CosineScheduler` node generates a schedule of sigma values using a cosine f
 
 - Computes a list of sigma values using a cosine function that transitions smoothly from `sigma_max` to `sigma_min`.
 - Utilizes a cosine curve modulated by the specified `period` to adjust the rate and nature of this transition.
+
+## GaussianScheduler Node
+
+The `GaussianScheduler` node generates a schedule of sigma values using a Gaussian (normal) distribution.
+
+### Parameters
+
+- **steps** (`INT`): Number of discrete steps in the schedule.
+  - Default: `20`
+  - Range: `1` to `10000`
+
+- **sigma_max** (`FLOAT`): The maximum value of sigma in the schedule.
+  - Default: `1.0`
+  - Range: `0.0` to `5000.0`
+
+- **sigma_min** (`FLOAT`): The minimum value of sigma in the schedule.
+  - Default: `0.0`
+  - Range: `0.0` to `5000.0`
+
+- **mean** (`FLOAT`): The mean of the Gaussian distribution used to calculate sigma values.
+  - Default: `0.0`
+  - Range: `-5000.0` to `5000.0`
+
+- **standard_deviation** (`FLOAT`): The standard deviation of the Gaussian distribution.
+  - Default: `1.0`
+  - Range: `0.0` to `5000.0`
+
+- **a** (`FLOAT`): The lower bound of the range for generating sigma values.
+  - Default: `0.0`
+  - Range: `-5000.0` to `5000.0`
+
+- **b** (`FLOAT`): The upper bound of the range for generating sigma values.
+  - Default: `1.0`
+  - Range: `-5000.0` to `5000.0`
+  - Note: If `a > b`, their values are swapped. They must not be equal.
+
+### Functionality
+
+- Computes a list of sigma values based on a Gaussian distribution, smoothly transitioning from `sigma_max` to `sigma_min`.
+- Utilizes the Gaussian function defined by the specified `mean` and `standard_deviation`.
+- Scales the computed Gaussian values to fit within the range defined by `sigma_min` and `sigma_max`.
