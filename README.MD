@@ -173,3 +173,22 @@ The `ConcatSigmas` node combines two sets of sigma values into a single sequence
 ### Functionality
 
 - Takes two input arrays of sigma values (`sigmas1` and `sigmas2`) and concatenates them into a single array.
+
+## InvertSigmas Node
+
+![Illustration of InvertSigmas Node interface](resources/img/invert_sigmas.png)
+
+The `InvertSigmas` node inverts the sequence of sigma values such that each value becomes symmetrical around the midpoint between the maximum and minimum sigma values in the original sequence.
+
+### Parameters
+
+- **sigmas** (`SIGMAS`): An array of sigma values to be inverted.
+
+### Functionality
+
+- Calculates the maximum (`sigma_max`) and minimum (`sigma_min`) values within the input sigma values.
+- Inverts each sigma value according to the formula:  
+  \[
+  \text{inverted\_sigma}[i] = \sigma_{\text{max}} - \sigma[i] + \sigma_{\text{min}}
+  \]
+  This transformation reflects each sigma value about the central point between `sigma_max` and `sigma_min`.
