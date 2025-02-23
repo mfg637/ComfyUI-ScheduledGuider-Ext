@@ -47,3 +47,31 @@ The `PerpNegSheduledCFGGuider` node extends the functionality of `SheduledCFGGui
 - **sigmas**: List of sigma values defining the CFG-schedule.
 - **use_negative_as_unconditional**: Boolean flag to determine if the negative condition should act as an unconditional baseline on CFG post processing (default: True).
 
+## CosineScheduler Node
+
+![Illustration of CosineScheduler Node interface](resources/img/cosine_scheduler.png)
+
+The `CosineScheduler` node generates a schedule of sigma values using a cosine function. This scheduler provides a smooth transition between defined maximum and minimum sigma values over a specified number of steps for specified period of cosine function.
+
+### Parameters
+
+- **steps** (`INT`): Number of discrete steps in the schedule. Determines how many sigma values will be generated.
+  - Default: `20`
+  - Range: `1` to `10000`
+
+- **sigma_max** (`FLOAT`): The maximum value of sigma in the schedule.
+  - Default: `1.0`
+  - Range: `0.0` to `5000.0`
+
+- **sigma_min** (`FLOAT`): The minimum value of sigma in the schedule.
+  - Default: `0.0`
+  - Range: `0.0` to `5000.0`
+
+- **period** (`FLOAT`): Controls the periodicity of the cosine function applied to generate sigma values.
+  - Default: `0.5`
+  - Range: `0.0` to `5000.0`
+
+### Functionality
+
+- Computes a list of sigma values using a cosine function that transitions smoothly from `sigma_max` to `sigma_min`.
+- Utilizes a cosine curve modulated by the specified `period` to adjust the rate and nature of this transition.
