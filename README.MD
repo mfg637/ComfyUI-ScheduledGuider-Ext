@@ -210,3 +210,28 @@ The `OffsetSigmas` node applies an additive offset to each sigma value in a give
 ### Functionality
 
 - Iterates through each sigma value in the input array and adds the specified `offset`.
+
+## SplitSigmasByValue Node
+
+The `SplitSigmasByValue` node divides an array of sigma values into two separate arrays based on a specified threshold value. This can be useful in diffusion models or other processes where you need to handle different ranges of noise levels separately.
+
+### Parameters
+
+- **sigmas** (`SIGMAS`): An array of sigma values that will be split into two groups.
+  
+- **value** (`FLOAT`): The threshold value used to determine the split point.
+  - Default: `1.0`
+  - Minimum: `0.0`
+  - Maximum: a very large number —`2^60`
+
+### Functionality
+
+- Iterates through the array of sigma values.
+- Splits the sigma values into two arrays:
+  - `high_sigmas`: Contains all sigma values greater than the specified `value`.
+  - `low_sigmas`: Contains all sigma values less than or equal to the specified `value`.
+- Returns two arrays, `high_sigmas` and `low_sigmas`, representing the split groups.
+
+### Usage
+
+This node is particularly useful when you need to apply different processing steps to high and low noise levels in a schedule. For example, in a diffusion model, you might want to treat steps with higher noise differently from those with lower noise.
