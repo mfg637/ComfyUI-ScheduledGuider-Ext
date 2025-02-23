@@ -157,3 +157,19 @@ The `LogNormalScheduler` node generates a schedule of sigma values using a log-n
 - Computes a list of sigma values based on a log-normal distribution, smoothly transitioning from `sigma_max` to `sigma_min`.
 - Utilizes the log-normal function defined by the specified `mean` and `standard_deviation`.
 - Scales the computed log-normal values to fit within the range defined by `sigma_min` and `sigma_max`.
+
+## ConcatSigmas Node
+
+![Illustration of ConcatSigmas Node interface](resources/img/concat_sigmas.png)
+
+The `ConcatSigmas` node combines two sets of sigma values into a single sequence. This can be particularly useful in diffusion models or any application requiring the merging of different noise schedules.
+
+### Parameters
+
+- **sigmas1** (`SIGMAS`): The first set of sigma values to concatenate.
+  
+- **sigmas2** (`SIGMAS`): The second set of sigma values to concatenate.
+
+### Functionality
+
+- Takes two input arrays of sigma values (`sigmas1` and `sigmas2`) and concatenates them into a single array.
