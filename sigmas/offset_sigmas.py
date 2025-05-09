@@ -7,6 +7,8 @@ class OffsetSigmas:
                 "offset": ("FLOAT", {
                     "default": 1.0,
                     "step": 0.1,
+                    "min": -5000,
+                    "max": 5000,
                 }),
             },
         }
