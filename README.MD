@@ -80,6 +80,8 @@ The `CosineScheduler` node generates a schedule of sigma values using a cosine f
 
 The `GaussianScheduler` node generates a schedule of sigma values using a Gaussian (normal) distribution.
 
+![Illustration of GaussianScheduler Node interface](resources/img/gaussian-scheduler.png)
+
 ### Parameters
 
 - **steps** (`INT`): Number of discrete steps in the schedule.
@@ -121,6 +123,8 @@ The `GaussianScheduler` node generates a schedule of sigma values using a Gaussi
 
 The `LogNormalScheduler` node generates a schedule of sigma values using a log-normal distribution.
 
+![Illustration of LogNormalScheduler Node interface](resources/img/lognormal_scheduler.png)
+
 ### Parameters
 
 - **steps** (`INT`): Number of discrete steps in the schedule.
@@ -157,6 +161,96 @@ The `LogNormalScheduler` node generates a schedule of sigma values using a log-n
 - Computes a list of sigma values based on a log-normal distribution, smoothly transitioning from `sigma_max` to `sigma_min`.
 - Utilizes the log-normal function defined by the specified `mean` and `standard_deviation`.
 - Scales the computed log-normal values to fit within the range defined by `sigma_min` and `sigma_max`.
+
+## N/X Scheduler Node Description
+
+![Illustration of LogNormalScheduler Node interface](resources/img/x-inverse_scheduler.png)
+
+### Overview
+
+The `n/x Scheduler` is a ComfyUI node designed for custom sampling within the CFG-schedulers category. It generates a sequence of sigma values based on an inverse function, allowing for flexible control over the sampling process.
+
+### Inputs
+
+- **steps** (`INT`): The number of steps for which sigma values are generated.
+  - Default: 20
+  - Range: [1, 10000]
+
+- **sigma_max** (`FLOAT`): The maximum sigma value.
+  - Default: 1.0
+  - Range: [0.0, 5000.0]
+
+- **sigma_min** (`FLOAT`): The minimum sigma value.
+  - Default: 0.0
+  - Range: [0.0, 5000.0]
+
+- **k** (`FLOAT`): A constant used in the inverse function calculation.
+  - Default: 1.0
+  - Range: [0.5, 5000.0]
+
+- **a** (`FLOAT`): The starting point of the range for x-values.
+  - Default: 0.0
+  - Range: [-5000.0, 5000.0]
+
+- **b** (`FLOAT`): The ending point of the range for x-values.
+  - Default: 1.0
+  - Range: [-5000.0, 5000.0]
+
+- **x_abs_min_limit** (`FLOAT`): The absolute minimum limit for x-values.
+  - Default: 1e-9
+  - Range: [1e-256, 2.0]
+
+- **y_abs_max_limit** (`FLOAT`): The absolute maximum limit for y-values (sigma).
+  - Default: 0.0
+  - Range: [0.0, 5000.0]
+
+### Functionality
+
+The `get_sigmas` function generates sigma values by:
+
+1. Ensuring `a` is less than `b`. If not, they are swapped.
+2. Calculating `abs_min_x`, which ensures that `x` does not fall below a certain threshold.
+3. Iterating over the specified number of steps to compute sigma values using the formula `k / x`.
+4. Scaling the computed sigmas to fit within the range defined by `sigma_min` and `sigma_max`.
+
+## ArctanScheduler Node Description
+
+### Overview
+
+The `ArctanScheduler` is a ComfyUI node designed for custom sampling within the CFG-schedulers category. It generates a sequence of sigma values using an arctangent function.
+
+![Illustration of ArctanScheduler Node interface](resources/img/arctan-x_scheduler.png)
+
+### Inputs
+
+- **steps** (`INT`): The number of steps for which sigma values are generated.
+  - Default: 20
+  - Range: [1, 10000]
+
+- **sigma_max** (`FLOAT`): The maximum sigma value.
+  - Default: 1.0
+  - Range: [0.0, 5000.0]
+
+- **sigma_min** (`FLOAT`): The minimum sigma value.
+  - Default: 0.0
+  - Range: [0.0, 5000.0]
+
+- **a** (`FLOAT`): The starting point of the range for x-values, scaled by π/2.
+  - Default: 0.0
+  - Range: [-5000.0, 5000.0]
+
+- **b** (`FLOAT`): The ending point of the range for x-values, scaled by π/2.
+  - Default: 1.0
+  - Range: [-5000.0, 5000.0]
+
+### Functionality
+
+The `get_sigmas` function performs the following operations:
+
+1. Ensures that `a` is less than `b`. If not, their values are swapped.
+2. Converts the input range `[a, b]` to radians by multiplying each endpoint by π/2.
+3. Iterates through the specified number of steps to compute sigma values using the arctangent function `atan(x)`.
+4. Scales the computed sigmas to fit within the range defined by `sigma_min` and `sigma_max`.
 
 ## ConcatSigmas Node
 
@@ -235,3 +329,119 @@ The `SplitSigmasByValue` node divides an array of sigma values into two separate
 ### Usage
 
 This node is particularly useful when you need to apply different processing steps to high and low noise levels in a schedule. For example, in a diffusion model, you might want to treat steps with higher noise differently from those with lower noise.
+
+## PredefinedLogarithm Node Description
+
+![Illustration of OffsetSigmas Node interface](resources/img/logarithm.png)
+
+### Overview
+
+The `PredefinedLogarithm` node is part of the custom sampling category in ComfyUI. It allows to apply a logarithmic transformation to a sequence of sigma values using predefined bases: natural logarithm (`e`), base 10, or base 2.
+
+### Inputs
+
+- **sigmas** (`SIGMAS`): The input sigma values that need to be transformed.
+  
+- **base** (`ENUM`): The logarithm base to be used for transformation.
+  - Options: `"e"`, `"10"`, `"2"`
+  - Default: `"e"`
+
+### Functionality
+
+- Applies the specified logarithmic transformation to each sigma value.
+- Supports three predefined bases:
+  - Natural logarithm (`e`)
+  - Base 10 logarithm
+  - Base 2 logarithm
+
+---
+
+## CustomBaseLogarithm Node Description
+
+### Overview
+
+The `CustomBaseLogarithm` node also belongs to the custom sampling category in ComfyUI. It allows to specify any positive real number as the base for the logarithmic transformation of sigma values.
+
+### Inputs
+
+- **sigmas** (`SIGMAS`): The input sigma values that need to be transformed.
+
+- **base** (`FLOAT`): The base of the logarithm to be applied.
+  - Default: 2.0
+  - Range: [1.1, ∞)
+
+### Functionality
+
+- Transforms each sigma value using a logarithm with a user-defined base.
+- Allows for highly customizable transformations based on specific requirements.
+
+## PredefinedExponent Node Description
+
+![Illustration of PredefinedExponent Node interface](resources/img/log-exp.png)
+
+### Overview
+
+The `PredefinedExponent` node is part of the custom sampling category in ComfyUI. It allows to apply an exponential transformation to a sequence of sigma values using predefined bases: natural exponent (`e`), base 10, or base 2.
+
+### Inputs
+
+- **sigmas** (`SIGMAS`): The input sigma values that need to be transformed.
+  
+- **base** (`ENUM`): The base for the exponential transformation.
+  - Options: `"e"`, `"10"`, `"2"`
+  - Default: `"e"`
+
+### Functionality
+
+- Applies the specified exponential transformation to each sigma value.
+- Supports three predefined bases:
+  - Natural exponent (`e`)
+  - Base 10
+  - Base 2
+
+## Usage
+
+This node is ideal for reverting logarithmic transformations applied to sigma schedules, enabling users to scale their sigma values exponentially. It's particularly useful when users want to revert previously applied logarithmic scales back to their original form.
+
+---
+
+## CustomExponent Node Description
+
+![Illustration of CustomExponent Node interface](resources/img/custom-log-exp.png)
+
+### Overview
+
+The `CustomExponent` node also belongs to the custom sampling category in ComfyUI. It allows to specify any positive real number as the base for the exponential transformation of sigma values.
+
+### Inputs
+
+- **sigmas** (`SIGMAS`): The input sigma values that need to be transformed.
+
+- **base** (`FLOAT`): The base of the exponential function to be applied.
+  - Default: 2.0
+  - Range: [1.1, ∞)
+
+### Functionality
+
+- Transforms each sigma value using an exponential function with a user-defined base.
+- Allows for highly customizable transformations based on specific requirements.
+
+---
+
+## SigmasToPower Node Description
+
+### Overview
+
+The `SigmasToPower` node is part of the custom sampling category in ComfyUI. It allows to raise each sigma value to a specified power, providing a straightforward way to adjust the distribution of sigma values.
+
+## Inputs
+
+- **sigmas** (`SIGMAS`): The input sigma values that need to be transformed.
+
+- **power** (`FLOAT`): The exponent to which each sigma value will be raised.
+  - Default: 2.0
+  - Step: 0.1
+
+## Functionality
+
+- Raises each sigma value to the specified power.
