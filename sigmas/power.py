@@ -81,6 +81,7 @@ class CustomExponent:
 
 
 class SigmasToPower:
+    @classmethod
     def INPUT_TYPES(s):
         return {
             "required": {
@@ -95,5 +96,6 @@ class SigmasToPower:
     CATEGORY = "sampling/custom_sampling/sigmas"
 
     FUNCTION = "get_sigmas"
+
     def get_sigmas(self, sigmas, power):
         return to_power(sigmas, power)

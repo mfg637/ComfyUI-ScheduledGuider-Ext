@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-scheduledguider-ext"
 description = "This extension contains various nodes for CFG scheduling and more. NODES:ScheduledCFGGuider, PerpNegScheduledCFGGuider, CosineScheduler, GaussianScheduler, LogNormalScheduler, InvertSigmas, ConcatSigmas, OffsetSigmas, SplitSigmasByValue"
-version = "1.1.0"
+version = "1.1.1"
 license = {file = "LICENSE"}
 
 [project.urls]
